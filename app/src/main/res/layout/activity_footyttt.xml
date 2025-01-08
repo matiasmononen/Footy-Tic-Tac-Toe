@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_green"
+    tools:context=".multiplayer.FootytttActivity">
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="180dp"
+        >
+        <TextView
+            android:id="@+id/tvCountdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="60"
+            android:textColor="@color/black"
+            android:textSize="40sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="300dp"
+        android:layout_marginTop="210dp"
+        android:elevation="550dp"
+        android:background="@drawable/button_background"
+        android:src="@drawable/greycross"
+        android:layout_gravity="right"
+        android:visibility="gone"/>
+
+
+    <LinearLayout
+        android:id="@+id/loading"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/round_back"
+        android:gravity="center_horizontal"
+        android:elevation="20dp"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvWaiting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Waiting for an opponent"
+            android:textSize="16sp"
+            android:textColor="@color/orange"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"/>
+
+        <ProgressBar
+            android:id="@+id/pbBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            />
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:text="CANCEL"/>
+        <TextView
+            android:id="@+id/tvCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_above="@id/gameContainer"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/llPlayer1"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_back"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPlayer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="You"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/playerShirt"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/pbadgest" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPlayer2"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/round_back"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPlayer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="Opponent"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/opponentShirt"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/p0" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/gameContainer"
+        android:orientation="vertical"
+        android:layout_marginStart="0dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/game_back">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+            <ImageView
+                android:id="@+id/image00"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/orange_game_back"
+                android:background="@drawable/orange_game_back" />
+
+            <ImageView
+                android:id="@+id/key4"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:padding="20dp"
+                android:src="@drawable/main_game_back"
+                android:background="@drawable/main_game_back" />
+
+            <ImageView
+                android:id="@+id/key5"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:padding="20dp"
+                android:src="@drawable/main_game_back"
+                android:background="@drawable/main_game_back" />
+
+            <ImageView
+                android:id="@+id/key6"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:padding="20dp"
+                android:src="@drawable/main_game_back"
+                android:background="@drawable/main_game_back" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/key1"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:padding="20dp"
+                android:src="@drawable/main_game_back"
+                android:background="@drawable/main_game_back" />
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+            <ImageView
+                android:id="@+id/image1"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:adjustViewBounds="true"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:background="@drawable/dark_game_back"
+                android:src="@drawable/dark_game_back" />
+
+                <TextView
+                    android:id="@+id/tvName1"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/dark_game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image2"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/game_back"
+                    android:src="@drawable/game_back" />
+
+                <TextView
+                    android:id="@+id/tvName2"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image3"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/dark_game_back"
+                    android:src="@drawable/dark_game_back" />
+
+                <TextView
+                    android:id="@+id/tvName3"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/dark_game_back"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/key2"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:padding="20dp"
+                android:src="@drawable/main_game_back"
+                android:background="@drawable/main_game_back" />
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image4"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/game_back"
+                    android:src="@drawable/game_back" />
+
+                <TextView
+                    android:id="@+id/tvName4"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image5"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/dark_game_back"
+                    android:src="@drawable/dark_game_back" />
+
+                <TextView
+                    android:id="@+id/tvName5"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/dark_game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image6"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/game_back"
+                    android:src="@drawable/game_back" />
+
+                <TextView
+                    android:id="@+id/tvName6"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/game_back"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+            <ImageView
+                android:id="@+id/key3"
+                android:layout_width="44dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:src="@drawable/main_game_back"
+                android:padding="20dp"
+                android:background="@drawable/main_game_back" />
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image7"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/dark_game_back"
+                    android:src="@drawable/dark_game_back" />
+
+                <TextView
+                    android:id="@+id/tvName7"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/dark_game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image8"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/game_back"
+                    android:src="@drawable/game_back" />
+
+                <TextView
+                    android:id="@+id/tvName8"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/game_back"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/image9"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:adjustViewBounds="true"
+                    android:paddingTop="20dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:background="@drawable/dark_game_back"
+                    android:src="@drawable/dark_game_back" />
+
+                <TextView
+                    android:id="@+id/tvName9"
+                    android:layout_width="100dp"
+                    android:layout_height="20dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black"
+                    android:background="@drawable/dark_game_back"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnGiveUp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="70dp"
+        android:layout_marginLeft="70dp"
+        android:text="GIVE UP" />
+
+    <Button
+        android:id="@+id/btnPassTurn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="240dp"
+        android:text="PASS TURN" />
+
+</RelativeLayout>

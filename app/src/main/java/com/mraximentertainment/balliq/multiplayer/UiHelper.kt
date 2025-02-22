@@ -19,12 +19,10 @@ import com.mraximentertainment.balliq.helpers.setImage
  */
 class UiHelper(private val context: Context, private val binding: ActivityFootytttBinding, val activity: FootytttActivity) {
 
-    // Game-related variables
-    var teamsList: List<String>? = null       // List of teams for the game
-    lateinit var gameLogic: GameLogic         // Reference to the game logic instance
+    var teamsList: List<String>? = null
+    lateinit var gameLogic: GameLogic
     private lateinit var guessDialog: GuessDialog
 
-    // UI elements
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     private val shirtIVs = arrayOf(           // ImageViews for player shirt images
         binding.image1, binding.image2, binding.image3,
@@ -40,10 +38,12 @@ class UiHelper(private val context: Context, private val binding: ActivityFootyt
         binding.key1, binding.key2, binding.key3,
         binding.key4, binding.key5, binding.key6
     )
-    private val timerTextView = binding.tvCountdown  // Countdown timer display
-    private val loadingDialog = binding.loading      // Loading dialog view
+    private val timerTextView = binding.tvCountdown
+    private val loadingDialog = binding.loading
 
     // Timers
+
+    // Timer to automatically pass turn if no guess is made
     private val countDownTimer = object : CountDownTimer(60000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             // Update the timer display every second
@@ -61,13 +61,13 @@ class UiHelper(private val context: Context, private val binding: ActivityFootyt
         }
     }
 
+    // Timer to automatically grant player the win if opponent is unresponsive
     val opponentTimer = object : CountDownTimer(80000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             // Opponent's turn timer, no UI update needed
         }
 
         override fun onFinish() {
-            // Handle timeout for the opponent's turn
             gameLogic.updateGameWin(gameLogic.playerId)
         }
     }
@@ -193,6 +193,7 @@ class UiHelper(private val context: Context, private val binding: ActivityFootyt
     fun showGameOverDialog(text: String) {
         val dialog = WinDialog(activity, text)
         dialog.setCancelable(false)
+        // Wait for two seconds for player to see the final guess
         Thread.sleep(2000)
         if (context.isActivityRunning()) {
             dialog.show()

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 object GoogleBilling {
 
     private lateinit var billingClient: BillingClient
+    // Map for storing the queried product details
     private val productDetailsMap: MutableMap<String, ProductDetails> = mutableMapOf()
     private lateinit var productDetails: ProductDetails
 
@@ -25,10 +26,10 @@ object GoogleBilling {
      * Initializes the BillingClient and sets up the connection.
      *
      * @param context The application or activity context.
-     * @param productId The product ID to query details for.
-     * @param nameView TextView to display the product name.
-     * @param priceView TextView to display the product price.
-     * @param onComplete Callback executed after a successful setup or purchase.
+     * @param productMap A map with the name of the product as a key corresponding to a
+     * pair of functions. First one being the function called after the products have
+     * been queried and the second one being the function called after a succesfull
+     * purchase of the product.
      */
     fun initializeBilling(
         context: Context,
@@ -64,8 +65,7 @@ object GoogleBilling {
      * Queries product details for the given product ID and updates the UI.
      *
      * @param productId The product ID to query.
-     * @param nameView TextView to display the product name.
-     * @param priceView TextView to display the product price.
+     * @param onQuery The function called after a successful query
      */
     private fun queryProductDetails(productId: String, onQuery: (productDetails: ProductDetails) -> Unit) {
         val queryProductDetailsParams = QueryProductDetailsParams.newBuilder()
@@ -81,6 +81,7 @@ object GoogleBilling {
 
         billingClient.queryProductDetailsAsync(queryProductDetailsParams) { billingResult, productDetailsList ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && productDetailsList.isNotEmpty()) {
+                // Save the product details and call onQuery function.
                 productDetailsMap[productId] = productDetailsList[0]
                 productDetailsMap[productId]?.let { onQuery(it) }
                 Log.e(TAG, "${productDetailsList[0]}")
@@ -97,6 +98,7 @@ object GoogleBilling {
      */
     fun launchPurchaseFlow(context: Context, productId: String) {
         if (productDetailsMap[productId] != null) {
+            // Retrieve product details from the map
             productDetails = productDetailsMap[productId]!!
             val billingFlowParams = BillingFlowParams.newBuilder()
                 .setProductDetailsParamsList(
@@ -116,8 +118,10 @@ object GoogleBilling {
     /**
      * Creates a listener to handle purchase updates.
      *
-     * @param context The application or activity context.
-     * @param onComplete Callback executed after a successful purchase.
+     * @param productMap A map with the name of the product as a key corresponding to a
+     * pair of functions. First one being the function called after the products have
+     * been queried and the second one being the function called after a successful
+     * purchase of the product.
      * @return PurchasesUpdatedListener
      */
     private fun createPurchaseUpdateListener(
@@ -144,14 +148,15 @@ object GoogleBilling {
      * Handles a successful purchase.
      *
      * @param purchase The completed purchase.
-     * @param context The application or activity context.
-     * @param onComplete Callback executed after completing the purchase.
+     * @param productMap A map with the name of the product as a key corresponding to a
+     * pair of functions. First one being the function called after the products have
+     * been queried and the second one being the function called after a successful
+     * purchase of the product.
      */
     private fun handlePurchase(purchase: Purchase, productMap: Map<String, Pair<(productDetails: ProductDetails) -> Unit, (purchase: Purchase) -> Unit>>) {
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
             Log.i(TAG, "Purchase successful: ${purchase.orderId}")
 
-            // Acknowledge the purchase to comply with Google Play policies
             billingClient.acknowledgePurchase(
                 AcknowledgePurchaseParams.newBuilder()
                     .setPurchaseToken(purchase.purchaseToken)
@@ -161,6 +166,7 @@ object GoogleBilling {
                     Log.i(TAG, "Purchase acknowledged.")
                     val productIDs = purchase.products
                     for (productID in productIDs) run {
+                        // Call the on purchase functions for purchased products.
                         productMap[productID]?.second?.let { it(purchase) }
                     }
                 } else {
@@ -170,6 +176,11 @@ object GoogleBilling {
         }
     }
 
+    /**
+    * Consumes a given purchase.
+     *
+     * @param purchase The purchase to be consumed.
+    */
     fun consumePurchase(purchase: Purchase) {
 
         val coroutineScope = CoroutineScope(Dispatchers.IO)

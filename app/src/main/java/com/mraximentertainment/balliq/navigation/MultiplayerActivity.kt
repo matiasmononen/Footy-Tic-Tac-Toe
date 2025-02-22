@@ -90,6 +90,8 @@ class MultiplayerActivity : AppCompatActivity() {
     /**
      * Handles the button click for starting a game based on the specified type.
      * Displays ads for non-premium users.
+     *
+     * @param type Indicates if the game is public or private
      */
     private fun handlePlayClick(type: String) {
         if (isPremium) {
@@ -118,6 +120,8 @@ class MultiplayerActivity : AppCompatActivity() {
     /**
      * Begins a new game by creating an intent to start the FootytttActivity.
      * A game code is passed depending on the game type.
+     *
+     * @param type Indicates if the game is public or private
      */
     private fun beginGame(type: String) {
         val intent = when (type) {

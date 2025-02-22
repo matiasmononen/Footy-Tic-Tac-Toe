@@ -25,11 +25,9 @@ class PremiumDialog(private val activity: Activity) : Dialog(activity) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflate the layout and set it as the dialog's content
         binding = PremiumDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize SharedPreferences for storing user data
         sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
 
@@ -87,8 +85,6 @@ class PremiumDialog(private val activity: Activity) : Dialog(activity) {
         trophies += 200
         editor.putInt("trophies", trophies)
         editor.apply()
-
-        // Optional: Provide feedback to the user (e.g., show a toast or dialog)
     }
 
     /**

@@ -18,10 +18,7 @@ import com.mraximentertainment.balliq.helpers.isActivityRunning
  */
 class FootytttActivity : AppCompatActivity(), MyDialogCallback {
 
-    // View binding for accessing UI elements
     private lateinit var binding: ActivityFootytttBinding
-
-    // Context for accessing resources and services
     private lateinit var context: Context
 
     // Helper classes for game logic and UI management
@@ -29,10 +26,8 @@ class FootytttActivity : AppCompatActivity(), MyDialogCallback {
     private lateinit var uiHelper: UiHelper
     private lateinit var listeners: GameRepository
 
-    // Firebase database reference for communication with Firebase
     private val database = FirebaseDatabase.getInstance().getReferenceFromUrl(BuildConfig.FIREBASE_ADDRESS)
 
-    // Game state variables
     private lateinit var suggestionsWithNormalized: List<Pair<String, String>>
     private var suggestionNameList = mutableListOf<String>()
     private var answerList = mutableListOf<String>()
@@ -63,6 +58,8 @@ class FootytttActivity : AppCompatActivity(), MyDialogCallback {
 
     /**
      * Initializes helper classes and their dependencies.
+     *
+     * @param privateCode Code to find the matching game and determine the game type.
      */
     private fun initializeHelpers(privateCode: String) {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
@@ -115,6 +112,10 @@ class FootytttActivity : AppCompatActivity(), MyDialogCallback {
 
     /**
      * Displays a search dialog for a selected game square.
+     *
+     * @param team1 First team shown on the search
+     * @param team2 Second team shown on the search
+     * @param box Index of the box corresponding to the teams
      */
     private fun showSearch(team1: String?, team2: String?, box: String) {
         selectedBox = box
@@ -129,8 +130,11 @@ class FootytttActivity : AppCompatActivity(), MyDialogCallback {
 
     /**
      * Handles the callback when a guess is received from the user.
+     *
+     * @param guess The guess received from the search dialog
      */
     override fun onDataReceived(guess: String) {
+        // Record the guess if answer was correct
         if (guess in answerList) {
             val formattedGuess = formatGuess(guess)
             gameLogic.makeGuess(selectedBox, gameLogic.playerId, formattedGuess)

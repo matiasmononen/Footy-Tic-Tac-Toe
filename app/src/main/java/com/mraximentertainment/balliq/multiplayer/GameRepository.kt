@@ -16,7 +16,6 @@ import kotlin.random.Random
  *
  * @param gameLogic Core game logic.
  * @param uiHelper Helper for updating UI components.
- * @param databaseHelper Helper for local database operations.
  * @param type The game type (e.g., "connections", "private_connections").
  * @param privateCode Private code for private game connections.
  * @param context The application context for accessing resources and launching activities.
@@ -57,9 +56,10 @@ class GameRepository(
 
     /**
      * Processes connections in the database and sets up a match if possible.
+     *
+     * @param snapshot Snapshot containing the connections of the games type
      */
     private fun processConnections(snapshot: DataSnapshot) {
-        Log.d("GameRepository", "Private code length: ${privateCode.length}")
         for (connection in snapshot.children) {
             if (!gameLogic.opponentFound) {
                 val connectionId = connection.key ?: continue
@@ -67,16 +67,16 @@ class GameRepository(
 
                 when {
                     playerCount == 2 && status == "waiting" -> setupConnection(connection, connectionId, isTwoPlayer = true)
-                    playerCount == 1 && status != "waiting" &&
-                            (connectionId.takeLast(6) == privateCode || type == "connections") ->
+                    playerCount == 1 && status != "waiting" && (connectionId.takeLast(6) == privateCode || type == "connections") ->
                         setupConnection(connection, connectionId, isTwoPlayer = false)
                 }
             }
         }
 
+        // If no suitable connection found, create a new connection
         if (!gameLogic.opponentFound && status != "waiting") {
             if (type == "connections" || privateCode.length > 6) {
-                createNewConnection(snapshot)
+                createNewConnection()
             } else if (privateCode.length == 6) {
                 handleFailedMatchmaking()
             }
@@ -84,24 +84,33 @@ class GameRepository(
     }
 
     /**
-     * Sets up a connection for a two-player match or adds a player to an existing match.
+     * Adds a player to an existing match or completes match making in a full game
+     * if the user is part of the game.
+     *
+     * @param connection The database connection being processed
+     * @param connectionId ID of the connection
+     * @param isTwoPlayer Indicates if the connection has currently two players
      */
     private fun setupConnection(connection: DataSnapshot, connectionId: String, isTwoPlayer: Boolean) {
         if (isTwoPlayer) {
             var playerFound = false
+            // Iterate through players
             for (player in connection.children) {
                 val playerId = player.key ?: continue
                 if (playerId == gameLogic.playerId) {
                     playerFound = true
                 } else if (playerFound) {
+                    // If there is another player with the user match making can be completed.
                     initializeOpponent(player, connectionId)
                     return
                 }
             }
         } else {
+            // Add player to the game
             database.child(type).child(connectionId).child(gameLogic.playerId)
                 .child("shirt").setValue(gameLogic.playerShirt)
             val player = connection.children.first()
+            // Retrieve team list from the connection and complete match making.
             uiHelper.teamsList = player.child("teams").getValue(object : GenericTypeIndicator<List<String>>() {})
             initializeOpponent(player, connectionId)
         }
@@ -109,6 +118,9 @@ class GameRepository(
 
     /**
      * Initializes the opponent's data and starts the game.
+     *
+     * @param player Data snapshot containing the opponents information
+     * @param connectionId ID corresponding to the games connection
      */
     private fun initializeOpponent(player: DataSnapshot, connectionId: String) {
         gameLogic.opponentId = player.key ?: return
@@ -131,7 +143,7 @@ class GameRepository(
     /**
      * Creates a new connection in the database for matchmaking.
      */
-    private fun createNewConnection(snapshot: DataSnapshot) {
+    private fun createNewConnection() {
         val newConnectionId = generateConnectionId()
         gameLogic.connectionId = newConnectionId
         uiHelper.teamsList = DatabaseHelper.selectTeams("world")
@@ -178,6 +190,7 @@ class GameRepository(
                         val boxPosition = snapshot.child("box_position").getValue(String::class.java)?.toInt()
                         val playerId = snapshot.child("player_id").getValue(String::class.java)
 
+                        // Record guess if it is valid
                         if (boxPosition != null && playerId != null) {
                             uiHelper.updateTurnUI(gameLogic.turn == gameLogic.playerId)
                             gameLogic.handleGuess(playerName, boxPosition, playerId)

@@ -52,6 +52,8 @@ class WinDialog(activity: Activity, private val message: String) : Dialog(activi
 
     /**
      * Set up the action listeners for the menu and new game buttons.
+     *
+     * @param isPremium Indicates whether the player has purchased premium
      */
     private fun setupButtonActions(isPremium: Boolean) {
         // Menu button dismisses the dialog and finishes the activity

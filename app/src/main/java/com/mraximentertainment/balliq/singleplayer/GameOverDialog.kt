@@ -16,7 +16,7 @@ import com.mraximentertainment.balliq.databinding.GameOverDialogBinding
  * @param activity The activity that creates this dialog.
  * @param score The player's score in the current game session.
  * @param time The time taken by the player to achieve the score.
- * @param map The current game map or mode (e.g., "World" or custom map).
+ * @param map The current game map.
  */
 class GameOverDialog(
     private val activity: Activity,
@@ -53,8 +53,8 @@ class GameOverDialog(
         val isNewRecord = updateRecordIfNeeded(recordScore, recordTime) // Update records if needed
         val (updatedRecordScore, updatedRecordTime) = getRecordData() // Fetch updated high score and time
 
-        displayResults(updatedRecordScore, updatedRecordTime, isNewRecord) // Display results on the dialog
-        setupButtonListeners(isPremium) // Set up listeners for button interactions
+        displayResults(updatedRecordScore, updatedRecordTime, isNewRecord)
+        setupButtonListeners(isPremium)
     }
 
     /**
@@ -111,8 +111,8 @@ class GameOverDialog(
      */
     private fun setupButtonListeners(isPremium: Boolean) {
         binding.btnMenu.setOnClickListener {
-            dismiss() // Close the dialog
-            activity.finish() // End the current activity
+            dismiss()
+            activity.finish()
         }
 
         binding.btnNewGame.setOnClickListener {
@@ -142,9 +142,6 @@ class GameOverDialog(
         activity.startActivity(intent) // Launch the new game activity
     }
 
-    /**
-     * Ensures the dialog is properly dismissed when the activity is stopped.
-     */
     override fun onStop() {
         super.onStop()
         dismiss()

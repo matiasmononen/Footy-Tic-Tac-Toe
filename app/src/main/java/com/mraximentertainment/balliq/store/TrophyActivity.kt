@@ -39,6 +39,8 @@ class TrophyActivity : AppCompatActivity() {
 
     /**
      * Creates a map of trophy values to buttons.
+     *
+     * @return A map with the name of the trophy bundle mapped to the corresponding button
      */
     private fun createTrophyButtonMap(): Map<String, Button> {
         return mapOf(
@@ -52,6 +54,12 @@ class TrophyActivity : AppCompatActivity() {
 
     /**
      * Creates a map for Google Billing, linking trophy values to their query handlers.
+     *
+     * @param btnMap A map with the name of the trophy bundle mapped to the corresponding button
+     * @return A map with the name of the product as a key corresponding to a
+     * pair of functions. First one being the function called after the products have
+     * been queried and the second one being the function called after a successful
+     * purchase of the product.
      */
     private fun createProductMap(btnMap: Map<String, Button>): Map<String, Pair<(ProductDetails) -> Unit, (Purchase) -> Unit>> {
         return btnMap.map { (key, btn) ->
@@ -61,6 +69,8 @@ class TrophyActivity : AppCompatActivity() {
 
     /**
      * Sets up the click listeners for each trophy purchase button.
+     *
+     * @param btnMap A map with the name of the trophy bundle mapped to the corresponding button
      */
     private fun setupButtonClickListeners(btnMap: Map<String, Button>) {
         btnMap.forEach { (trophyValue, btn) ->
@@ -72,6 +82,10 @@ class TrophyActivity : AppCompatActivity() {
 
     /**
      * Creates the onQuery function for displaying the product details (price) on the button.
+     *
+     * @param btn Button corresponding to the purchase
+     * @return A callback function invoked on a successful Google Billing query.
+     * Updates the UI to match the retrieved product details
      */
     private fun getOnQuery(btn: Button): (ProductDetails) -> Unit {
         return { productDetails: ProductDetails ->
@@ -84,6 +98,8 @@ class TrophyActivity : AppCompatActivity() {
 
     /**
      * Handles the completion of a trophy purchase.
+     *
+     * @param purchase completed purchase
      */
     private fun onComplete(purchase: Purchase) {
         runOnUiThread {

@@ -86,7 +86,16 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
-    // Function that sets up the UI for a single shirt
+    /**
+     * Function to update the UI to reflect given shirts state.
+     *
+     * @param button The button associated with the shirt (Equip, Buy)
+     * @param textView Textview indicating shirts price
+     * @param iv optional imageview displaying the trophy icon if necessary
+     * @param owned True if the shirt is owned by the player, false otherwise
+     * @param name The name of the shirt
+     * @param equippedShirt The name of the currently equipped shirt
+     */
     private fun setShirt (button: Button, textView: TextView, iv: ImageView?, owned: Boolean, name: String, equippedShirt: String) {
         if (owned && name != equippedShirt) {
             button.text = "EQUIP"
@@ -105,7 +114,11 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
-    // Unequips a shirt in the UI
+    /**
+     * Function to unequip a given shirt.
+     *
+     * @param name The name of the unequipped shirt
+     */
     private fun unequip (name: String){
         val shirt = shirtMap[name]
         if (shirt != null) {
@@ -114,11 +127,17 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
-    // Handles when the equip/buy button is clicked for a shirt
+    /**
+     * Sets an onClick function to a given shirt handling
+     * when the equip/buy button is clicked
+     *
+     * @param shirt The shirt corresponding to the pressed button
+     */
     private fun shirtOnClick(shirt: Shirt) {
         shirt.btn.setOnClickListener {
+            //Navigate based on the shirt
             when (shirt.name) {
-                "premshirt1" -> handlePremiumShirt(shirt,  false)
+                "isPremium" -> handlePremiumShirt(shirt,  false)
                 "premshirt2" -> handlePremiumShirt(shirt,  true)
                 "premshirt3" -> handlePremiumShirt(shirt, true)
                 "scoreshirt" -> handleSpecialShirt(shirt, TimeTrialActivity::class.java)
@@ -128,6 +147,12 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Handles click on a premium shirt (shirt requiring a purchase)
+     *
+     * @param shirt The corresponding shirt
+     * @param isBuyable True if the shirt is directly buyable, false otherwise
+     */
     private fun handlePremiumShirt(
         shirt: Shirt,
         isBuyable: Boolean
@@ -146,7 +171,11 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
-    // Equips the shirt in the UI
+    /**
+     * Function to equip a given shirt.
+     *
+     * @param shirt Shirt to be equipped
+     */
     private fun equipShirt(shirt: Shirt) {
         unequip(equippedShirt.toString())
         equippedShirt = shirt.name
@@ -156,6 +185,12 @@ class ShirtActivity : AppCompatActivity() {
         editor.apply()
     }
 
+    /**
+     * Handles  a press for a shirt that is achievement based
+     *
+     * @param shirt The corresponding shirt
+     * @param activityClass The activity where the the achievement is earned
+     */
     private fun handleSpecialShirt(
         shirt: Shirt,
         activityClass: Class<*>,
@@ -168,10 +203,17 @@ class ShirtActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Handles a click for normal shirts.
+     * Equips shirt if it's owned and tries to buy it otherwise
+     *
+     * @param shirt The corresponding shirt
+     */
     private fun handleDefaultShirt(shirt: Shirt) {
         if (shirt.owned) {
             equipShirt(shirt)
         }
+        // Try to buy the shirt
         else {
             val cost = shirt.tv.text.toString().toInt()
             if (trophies >= cost) {
@@ -181,6 +223,7 @@ class ShirtActivity : AppCompatActivity() {
                 getShirt(shirt)
                 binding.tvTrophies.text = trophies.toString()
             }
+            // Notify the user if they don't have enough trophies
             else{
                 val dialog = NoTrophiesDialog(this@ShirtActivity)
                 dialog.setCancelable(false)
@@ -190,11 +233,22 @@ class ShirtActivity : AppCompatActivity() {
     }
 
 
-    // Function for Google Billing
+    /**
+     * Callback function for completing a shirt purchase with google billing.
+     * Gain the purchased shirt
+     *
+     * @param purchase The completed purchase
+     */
     private fun onComplete(purchase: Purchase) {
         shirtMap[purchase.products.first()]?.let { getShirt(it) }
     }
 
+    /**
+     * Creates a callback function to be invoked on successful Google Billing query
+     *
+     * @param shirt The shirt corresponding to a product
+     * @return A function that updates the UI based on the given product details
+     */
     private fun getOnQuery(shirt: Shirt): (ProductDetails) -> Unit {
         return { productDetails: ProductDetails ->
             val currency = productDetails.oneTimePurchaseOfferDetails?.priceCurrencyCode ?: ""
@@ -203,12 +257,24 @@ class ShirtActivity : AppCompatActivity() {
             shirt.tv.text = "$price1Readable $currency"
         }
     }
-    // Class to express a single shirt.
+    /**
+     * Class to express a single shirt and the UI elements associated with it
+     *
+     * @param name The name of the shirt
+     * @param owned True if the shirt is owned, false otherwise
+     * @param tv Textview indicating the price of the shirt
+     * @param btn Button for equipping / buying the shirt
+     * @param iv Imageview showing trophy symbol if necessary
+     */
     private class Shirt(val name: String, var owned: Boolean, val tv: TextView, val btn: Button, val iv: ImageView?)
 
-    // Gives the user ownership of the shirt
+    /**
+     * Gives the player ownership of a given shirt
+     *
+     * @param shirt The shirt given to the player
+     */
     private fun getShirt(shirt: Shirt) {
-        editor.putBoolean("premshirt2", true)
+        editor.putBoolean(shirt.name, true)
         editor.apply()
         shirt.owned = true
         if (shirt.iv != null) {
@@ -218,6 +284,8 @@ class ShirtActivity : AppCompatActivity() {
         shirt.tv.text = "Owned"
         shirt.btn.text = "EQUIP"
     }
+
+    // Update the UI based on changes in other activities
     override fun onResume() {
         super.onResume()
         val sharedPreferences: SharedPreferences = this.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)

@@ -23,27 +23,6 @@ object DatabaseHelper {
     private const val DATABASE_VERSION = 7
 
     /**
-     * Initializes the database by copying it from the assets folder if it does not already exist.
-     *
-     * @param context The application context.
-     */
-    fun initialize(context: Context) {
-        val dbPath = context.getDatabasePath(DATABASE_NAME).absolutePath
-
-        if (!File(dbPath).exists()) {
-            try {
-                context.assets.open(DATABASE_NAME).use { input ->
-                    FileOutputStream(dbPath).use { output ->
-                        input.copyTo(output)
-                    }
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    /**
      * Executes a raw SQL query and retrieves results as a list of strings.
      * This method assumes the query selects a column named "name".
      *
@@ -72,10 +51,11 @@ object DatabaseHelper {
     }
 
     /**
-     * Fetches unique suggestions by ordering results based on their presence in specific tables.
+     * Fetches unique suggestions by ordering results based on their presence in wage
+     * table to ensure the most relevant players appear first.
      *
      * @param context The application context.
-     * @return A list of suggestions as pairs of raw and processed strings.
+     * @return A list of suggestions as pairs of raw and normalized strings.
      */
     fun getSuggestions(context: Context): List<Pair<String, String>> {
         val query = """
@@ -88,10 +68,10 @@ object DatabaseHelper {
     }
 
     /**
-     * Retrieves answers by determining relationships between teams using SQL queries.
+     * Retrieves answers by determining the players that have played for both given teams.
      *
      * @param team1 The first team (table name).
-     * @param team2 The second team (table name or filter condition).
+     * @param team2 The second team (table name or nation filter condition).
      * @param context The application context.
      * @return A list of answers as strings.
      */
@@ -113,9 +93,9 @@ object DatabaseHelper {
     }
 
     /**
-     * Selects vertical and horizontal teams from predefined lists based on the map.
+     * Selects distinct vertical and horizontal teams from predefined lists based on the map.
      *
-     * @param map The selected region or category (e.g., "italy", "spain", etc.).
+     * @param map The selected region or category.
      * @return A list of selected team names.
      */
     fun selectTeams(map: String): List<String> {

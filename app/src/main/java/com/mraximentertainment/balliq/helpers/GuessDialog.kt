@@ -56,6 +56,7 @@ class GuessDialog(
         val adapter = object :
             ArrayAdapter<String>(activity, android.R.layout.simple_dropdown_item_1line, suggestions) {
 
+            // Filter based on the normalized form of the input
             override fun getFilter(): Filter {
                 return object : Filter() {
                     override fun performFiltering(constraint: CharSequence?): FilterResults {
@@ -63,6 +64,7 @@ class GuessDialog(
                             removeDiacriticalMarks(it.toString()).lowercase()
                         } ?: ""
 
+                        // Retrieve the suggestions that match the normalized form of the constraint.
                         val filteredSuggestions = suggestionsWithNormalized
                             .filter { it.second.contains(normalizedQuery) }
                             .map { it.first }
@@ -135,7 +137,7 @@ class GuessDialog(
     }
 
     /**
-     * Adjusts the width of the team image if the team identifier is particularly short.
+     * Adjusts the width of the team image to represent flags correctly.
      *
      * @param teamKey The identifier for the team to check.
      */

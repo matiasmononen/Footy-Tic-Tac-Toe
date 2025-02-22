@@ -11,13 +11,11 @@ import com.mraximentertainment.balliq.databinding.ActivityRecordBinding
  */
 class RecordActivity : AppCompatActivity() {
 
-    // Binding for activity layout
     private lateinit var binding: ActivityRecordBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Inflate the layout using ViewBinding
         binding = ActivityRecordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -31,6 +29,9 @@ class RecordActivity : AppCompatActivity() {
 
     /**
      * Data class to encapsulate score and time for a record.
+     *
+     * @param score The amount of correct guesses
+     * @param time The time taken to achieve the score
      */
     private data class Record(val score: Int, val time: Float)
 
@@ -54,9 +55,9 @@ class RecordActivity : AppCompatActivity() {
                 score = sharedPreferences.getInt("Spain", 0),
                 time = sharedPreferences.getFloat("Spain time", DEFAULT_TIME)
             ),
-            "Germany" to Record(
-                score = sharedPreferences.getInt("Italy", 0), // Potential bug: Key should likely be "Germany"
-                time = sharedPreferences.getFloat("Italy time", DEFAULT_TIME) // Same as above
+            "Italy" to Record(
+                score = sharedPreferences.getInt("Italy", 0),
+                time = sharedPreferences.getFloat("Italy time", DEFAULT_TIME)
             )
         )
     }
@@ -70,7 +71,7 @@ class RecordActivity : AppCompatActivity() {
         binding.worldRecord.text = formatRecordMessage(records["World"] ?: Record(0, DEFAULT_TIME))
         binding.englandRecord.text = formatRecordMessage(records["England"] ?: Record(0, DEFAULT_TIME))
         binding.spainRecord.text = formatRecordMessage(records["Spain"] ?: Record(0, DEFAULT_TIME))
-        binding.germanyRecord.text = formatRecordMessage(records["Germany"] ?: Record(0, DEFAULT_TIME))
+        binding.germanyRecord.text = formatRecordMessage(records["Italy"] ?: Record(0, DEFAULT_TIME))
     }
 
     /**

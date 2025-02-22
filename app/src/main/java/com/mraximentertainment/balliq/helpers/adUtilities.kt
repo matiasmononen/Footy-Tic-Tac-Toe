@@ -8,7 +8,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.mraximentertainment.balliq.BuildConfig
 
-// Ad Unit ID sourced from BuildConfig for flexibility across environments (e.g., production, debug).
+// Ad Unit ID sourced from BuildConfig for flexibility across environments.
 const val AD_UNIT_ID = BuildConfig.AD_UNIT_ID
 
 /**

@@ -119,6 +119,7 @@ class OnePlayerActivity : AppCompatActivity(), MyDialogCallback {
             binding.image9 to binding.tvName9
         )
 
+        // Sets listeners to show guess dialog corresponding to the boxes teams
         imageTextPairs.forEachIndexed { index, (imageView, textView) ->
             imageView.setOnClickListener {
                 if (!completedBoxes.contains(index.toString())) {
@@ -132,6 +133,9 @@ class OnePlayerActivity : AppCompatActivity(), MyDialogCallback {
 
     /**
      * Retrieves the team names corresponding to the given index.
+     *
+     * @param index Index of the box
+     * @return Returns a pair containing the teams corresponding to the index
      */
     private fun getTeamsForIndex(index: Int): Pair<String?, String?> {
         val teamIndex1 = index / 3
@@ -179,6 +183,8 @@ class OnePlayerActivity : AppCompatActivity(), MyDialogCallback {
 
     /**
      * Handles the received guess and updates the UI if the guess is correct.
+     *
+     * @param guess The guess received from the callback
      */
     override fun onDataReceived(guess: String) {
         if (guess in answerList) {
@@ -186,12 +192,10 @@ class OnePlayerActivity : AppCompatActivity(), MyDialogCallback {
             selectedTextView.text = formatGuess(guess)
             setImage(selectedImageView, "p$playerShirt", this)
         }
+        // End the game if the grid is completed
         if (completedBoxes.size == MAX_BOXES) endGame()
     }
 
-    /**
-     * Prevents the back button from being pressed during the game.
-     */
     override fun onBackPressed() {
         // Disable back button functionality
     }

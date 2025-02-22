@@ -12,27 +12,24 @@ import kotlin.random.Random
  */
 class GameLogic(val database: DatabaseReference, private val uiHelper: UiHelper) {
 
-    // Unique identifiers and state tracking
-    var connectionId = "0"                   // Unique connection ID for the game
-    var turn = ""                            // Tracks whose turn it is (player or opponent)
-    var gameOver = false                     // Indicates whether the game has ended
-    var opponentFound = false                // Tracks if an opponent has joined the game
+    var connectionId = "0"
+    var turn = ""
+    var gameOver = false
+    var opponentFound = false
 
-    // Gameplay variables
-    private var doneGuesses = 0              // Tracks the number of guesses made
-    var opponentId = "0"                     // Opponent's unique ID
-    var playerShirt = ""                     // Current player's appearance/style
-    var opponentShirt = ""                   // Opponent's appearance/style
-    var playerId = "${System.currentTimeMillis()}_${Random.nextInt()}" // Unique ID for the player
+    private var doneGuesses = 0
+    var opponentId = "0"
+    var playerShirt = ""
+    var opponentShirt = ""
+    var playerId = "${System.currentTimeMillis()}_${Random.nextInt()}"
 
-    // Board state
     private val boxesSelectedBy = Array(9) { "" } // Tracks who selected each box (player or opponent)
     val doneBoxes = mutableListOf("0")       // Tracks the boxes that have already been played
 
     /**
      * Processes the player's guess and updates the game state.
      *
-     * @param name The name entered for the guess (e.g., a player or team name).
+     * @param name The name entered for the guess.
      * @param boxPosition The board position selected (1-9).
      * @param player The ID of the player making the guess.
      */
@@ -102,8 +99,8 @@ class GameLogic(val database: DatabaseReference, private val uiHelper: UiHelper)
         // Check if any combination is fulfilled by the player
         return winningCombinations.any { combination ->
             boxesSelectedBy[combination.first] == player &&
-                    boxesSelectedBy[combination.second] == player &&
-                    boxesSelectedBy[combination.third] == player
+            boxesSelectedBy[combination.second] == player &&
+            boxesSelectedBy[combination.third] == player
         }
     }
 

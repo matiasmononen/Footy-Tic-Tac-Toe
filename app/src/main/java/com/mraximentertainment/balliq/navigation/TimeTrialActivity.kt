@@ -18,7 +18,7 @@ import com.mraximentertainment.balliq.singleplayer.RecordActivity
 
 /**
  * Activity that handles the time trial game mode. This includes functionality
- * for selecting a map, playing the game, viewing records, and showing relevant ads.
+ * for selecting a map, playing the game, viewing records, and showing ads.
  */
 class TimeTrialActivity : AppCompatActivity() {
 
@@ -63,6 +63,8 @@ class TimeTrialActivity : AppCompatActivity() {
      * Handles the action when the Play button is clicked.
      * If the user is not premium, it will show an interstitial ad before starting the game.
      * If the user is premium, it starts the game directly.
+     *
+     * @param isPremium True if user is premium, false otherwise
      */
     private fun handlePlayButtonClick(isPremium: Boolean) {
         if (isPremium) {
@@ -129,9 +131,6 @@ class TimeTrialActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Reloads the ad when the activity is resumed.
-     */
     override fun onResume() {
         super.onResume()
         AdManager.loadAd(this)
